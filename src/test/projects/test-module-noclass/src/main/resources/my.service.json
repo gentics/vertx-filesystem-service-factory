@@ -1,0 +1,3 @@
+{
+  "main": "io.vertx.filesystem.SystemVerticle"
+}

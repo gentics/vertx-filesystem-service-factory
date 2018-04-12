@@ -5,7 +5,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Paths;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import io.vertx.core.DeploymentOptions;
@@ -15,9 +14,48 @@ import io.vertx.test.core.VertxTestBase;
 
 public class FilesystemVerticleFactoryTest extends VertxTestBase {
 
-	@Before
-	public void setup() {
-		System.clearProperty(ResolverOptions.BASE_DIR_SYS_PROP);
+	@Test
+	public void testDeploymentNotFound() {
+		setBaseDir("target/test-projects/test-module-main-verticle/target");
+		vertx.deployVerticle("filesystem:mymodulenotthere.jar", onFailure(err -> {
+			assertTrue(err instanceof IllegalArgumentException);
+			assertTrue(err.getMessage().startsWith("Cannot find module mymodulenotthere.jar"));
+			testComplete();
+		}));
+		await();
+	}
+
+	@Test
+	public void testDeploymentFolder() {
+		setBaseDir("target/test-projects/test-module-main-verticle");
+		vertx.deployVerticle("filesystem:target", onFailure(err -> {
+			assertTrue(err instanceof IllegalArgumentException);
+			assertTrue(err.getMessage().startsWith("Cannot find module target"));
+			testComplete();
+		}));
+		await();
+	}
+
+	@Test
+	public void testNoServiceName() throws Exception {
+		setBaseDir("target/test-projects/test-module/target");
+		vertx.deployVerticle("filesystem:mymodule.jar", onFailure(err -> {
+			assertTrue(err instanceof IllegalArgumentException);
+			assertTrue(err.getMessage().startsWith("Invalid service identifier"));
+			testComplete();
+		}));
+		await();
+	}
+
+	@Test
+	public void testBogusServiceID() throws Exception {
+		setBaseDir("target/test-projects/test-module/target");
+		vertx.deployVerticle("filesystem:mymodule.jar::bogus", onFailure(err -> {
+			assertTrue(err instanceof IllegalArgumentException);
+			assertTrue(err.getMessage().startsWith("Cannot find service descriptor file bogus.json on classpath"));
+			testComplete();
+		}));
+		await();
 	}
 
 	@Test
@@ -68,6 +106,17 @@ public class FilesystemVerticleFactoryTest extends VertxTestBase {
 		await();
 	}
 
+	/**
+	 * Test deployment of a module which references a verticle in the system classpath.
+	 */
+	@Test
+	public void testDeploymentNoClassModule() {
+		setBaseDir("target/test-projects/test-module-noclass/target");
+		assertDeployment("mymodule", "system");
+		vertx.deployVerticle("filesystem:mymodule.jar");
+		await();
+	}
+
 	@Test
 	public void testClassLoaderDep() {
 		setBaseDir("target/test-projects/test-module-dep/target");
@@ -96,6 +145,8 @@ public class FilesystemVerticleFactoryTest extends VertxTestBase {
 	@Test
 	public void testLoadDependencyFromParentLoaderWhenPresent() throws ClassNotFoundException, MalformedURLException {
 		setBaseDir("target/test-projects/test-module-dep/target");
+		// Load the class ourself and verify that the module will not deploy the class again.
+		// Instead the class which was loaded by the parent class loader should be used.
 		URLClassLoader loader = new URLClassLoader(new URL[] { Paths.get("target/test-projects/test-dependency/target/mydep.jar").toUri().toURL() },
 			FilesystemVerticleFactoryTest.class.getClassLoader());
 		loader.loadClass("io.vertx.mydep.DummyClass");

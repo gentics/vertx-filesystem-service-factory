@@ -5,13 +5,13 @@
 
 	<parent>
 		<groupId>vertx-test</groupId>
-		<artifactId>vertx-maven-service-factory-tests</artifactId>
+		<artifactId>vertx-filesystem-service-factory-tests</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
 	<artifactId>test-module</artifactId>
 
-	<name>Maven Service Factory - Test module</name>
+	<name>Filesystem Service Factory - Test module</name>
 
 	<dependencies>
 		<dependency>

@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>vertx-test</groupId>
-	<artifactId>vertx-maven-service-factory-tests</artifactId>
+	<artifactId>vertx-filesystem-service-factory-tests</artifactId>
 	<version>1.0.0</version>
 
-	<name>Maven Service Factory Test Projects - Parent</name>
+	<name>Filesystem Service Factory Test Projects - Parent</name>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -38,5 +38,6 @@
 		<module>test-module</module>
 		<module>test-module-main-verticle</module>
 		<module>test-module-dep</module>
+		<module>test-module-noclass</module>
 	</modules>
 </project>
