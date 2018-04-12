@@ -23,13 +23,13 @@ import io.vertx.core.AbstractVerticle;
  */
 public class MyVerticleZip extends AbstractVerticle {
 
-  @Override
-  public void start() throws Exception {
-    vertx.eventBus().publish("mymodule", "whateverZip");
-  }
+	@Override
+	public void start() throws Exception {
+		vertx.eventBus().publish("mymodule", "whateverZip");
+	}
 
-  @Override
-  public void stop() throws Exception {
-    vertx.eventBus().publish("mymoduleStopped", "whateverZip");
-  }
+	@Override
+	public void stop() throws Exception {
+		vertx.eventBus().publish("mymoduleStopped", "whateverZip");
+	}
 }

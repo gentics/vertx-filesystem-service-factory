@@ -18,13 +18,15 @@ import io.vertx.service.ServiceVerticleFactory;
 
 public class FilesystemVerticleFactory extends ServiceVerticleFactory {
 
-	private static final String MODULE_EXTENSION = ".jar";
+	public static final String BASE_DIR_SYS_PROP = ResolverOptions.BASE_DIR_SYS_PROP;
+
+	private static final String DEFAULT_BASE_DIR = ResolverOptions.DEFAULT_BASE_DIR;
 
 	private Vertx vertx;
 	private ResolverOptions resolverOptions;
 
 	public FilesystemVerticleFactory() {
-		this(new ResolverOptions());
+		this(new ResolverOptions().setBaseDirectory(System.getProperty(BASE_DIR_SYS_PROP, DEFAULT_BASE_DIR)));
 	}
 
 	public FilesystemVerticleFactory(ResolverOptions resolverOptions) {
@@ -42,7 +44,7 @@ public class FilesystemVerticleFactory extends ServiceVerticleFactory {
 	}
 
 	private File getModuleFile(String identifier) {
-		return Paths.get(resolverOptions.getBaseDirectory(), identifier + MODULE_EXTENSION).toAbsolutePath().normalize().toFile();
+		return Paths.get(resolverOptions.getBaseDirectory(), identifier).toAbsolutePath().normalize().toFile();
 	}
 
 	@Override
@@ -87,7 +89,8 @@ public class FilesystemVerticleFactory extends ServiceVerticleFactory {
 					fut.complete();
 
 				} else {
-					throw new IllegalArgumentException("Cannot find module " + moduleName + ". Maybe baseDir is invalid?");
+					throw new IllegalArgumentException(
+						"Cannot find module " + moduleName + ". Checked " + moduleFile.getAbsolutePath() + " Maybe baseDir is invalid?");
 				}
 			} catch (Exception e) {
 				fut.fail(e);

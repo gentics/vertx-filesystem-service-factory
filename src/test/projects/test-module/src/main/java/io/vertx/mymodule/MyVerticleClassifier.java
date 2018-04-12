@@ -23,13 +23,13 @@ import io.vertx.core.AbstractVerticle;
  */
 public class MyVerticleClassifier extends AbstractVerticle {
 
-  @Override
-  public void start() throws Exception {
-    vertx.eventBus().publish("mymodule", "whateverClassifier");
-  }
+	@Override
+	public void start() throws Exception {
+		vertx.eventBus().publish("mymodule", "whateverClassifier");
+	}
 
-  @Override
-  public void stop() throws Exception {
-    vertx.eventBus().publish("mymoduleStopped", "whateverClassifier");
-  }
+	@Override
+	public void stop() throws Exception {
+		vertx.eventBus().publish("mymoduleStopped", "whateverClassifier");
+	}
 }
