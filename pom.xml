@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.vertx</groupId>
-		<artifactId>vertx-parent</artifactId>
-		<version>11</version>
+		<groupId>com.gentics.vertx</groupId>
+		<artifactId>maven-vertx-parent</artifactId>
+		<version>3.5.0</version>
 	</parent>
 
 	<artifactId>vertx-filesystem-service-factory</artifactId>
-	<version>3.5.0</version>
 
 	<name>Filesystem Service Factory</name>
 
 	<properties>
-		<aether.version>1.1.0</aether.version>
 		<jetty.version>9.3.7.v20160115</jetty.version>
 		<vertx.version>${project.version}</vertx.version>
 	</properties>
@@ -85,7 +84,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -159,11 +157,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- We assemble the factory and all the deps we need into a shaded jar. This means that when it appears in the Vert.x distro all the aether deps are nicely isolated here -->
+			<!-- We assemble the factory and all the deps we need into a shaded jar. 
+				This means that when it appears in the Vert.x distro all the aether deps 
+				are nicely isolated here -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -173,7 +172,8 @@
 						<configuration>
 							<shadedClassifierName>shaded</shadedClassifierName>
 							<artifactSet>
-								<!-- By default all the deps go into the shaded jar, but we don't need some so we can exclude them here -->
+								<!-- By default all the deps go into the shaded jar, but we don't 
+									need some so we can exclude them here -->
 								<excludes>
 									<exclude>io.vertx:vertx-core</exclude>
 									<exclude>io.netty:netty-all</exclude>
@@ -234,25 +234,34 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>doc</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<attach>true</attach>
-							<descriptors>
-								<descriptor>${basedir}/src/main/assembly/docs.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
+
+
+	<repositories>
+		<repository>
+			<id>maven.gentics.com</id>
+			<name>Gentics Maven Repository</name>
+			<url>https://maven.gentics.com/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>lan.releases</id>
+			<name>Gentics Releases Repository</name>
+			<url>https://repo.gentics.com/artifactory/lan.releases.staging.mesh</url>
+		</repository>
+		<snapshotRepository>
+			<id>lan.snapshots</id>
+			<name>Gentics Snapshots Repository</name>
+			<url>https://repo.gentics.com/artifactory/lan.snapshots.mesh</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
