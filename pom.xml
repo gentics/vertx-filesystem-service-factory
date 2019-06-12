@@ -7,15 +7,16 @@
 	<parent>
 		<groupId>com.gentics.vertx</groupId>
 		<artifactId>maven-vertx-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.7.2</version>
 	</parent>
 
 	<artifactId>vertx-filesystem-service-factory</artifactId>
+	<version>3.7.1</version>
 
 	<name>Filesystem Service Factory</name>
 
 	<properties>
-		<vertx.version>${project.version}</vertx.version>
+		<vertx.version>3.7.1</vertx.version>
 	</properties>
 
 	<dependencyManagement>
@@ -196,6 +197,7 @@
 				<version>3.0.1</version>
 				<executions>
 					<execution>
+						<?m2e ignore ?>
 						<id>build-test-projects</id>
 						<goals>
 							<goal>run</goal>
